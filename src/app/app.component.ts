@@ -8,8 +8,8 @@ import {
   QueryList
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter, map, startWith } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, merge, Subject } from 'rxjs';
+import {  distinctUntilChanged, filter, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'my-app',
@@ -18,17 +18,17 @@ import { filter, map, startWith } from 'rxjs/operators';
 })
 export class AppComponent {
   constructor(private route: ActivatedRoute) {
+
   }
-  activeFragment$ = this.route.fragment.pipe(filter(item => item !==null && item?.length > 0),startWith('none'));
+  activeFragment$ = this.route.fragment.pipe(
+    tap(item => console.log(item)),
+    filter(item => item !==null && item?.length > 0),startWith('none'));
 
-  currentActive$ = new BehaviorSubject('null')
+  currentActiveSubject$ = new Subject<String>()
 
-  currentActiveState$ = combineLatest([this.activeFragment$, this.currentActive$]).pipe(map(([activeFragment,currentActive ]) => {
-    return {
-      activeFragment,
-      currentActive
-    }
-  }))
+  currentActive$ = this.currentActiveSubject$.pipe(distinctUntilChanged())
+
+  currentActiveState$ = merge(this.activeFragment$, this.currentActive$);
   
   public propOffset: Number = null;
   public commentsOffset: Number = null;
@@ -46,30 +46,9 @@ export class AppComponent {
     this.internalCommentsOffset = this.internalCommentsElement.nativeElement.offsetTop;
   }
 
-  @HostListener('window:scroll', ['$event'])
-  checkOffsetTop() {
-    //BELOW I AM GETTING FACTOR IDS, BUT NOT ABLE TO FIGURE OUT WHAT EXACT CONDITION TO APPLY, IN ORDER FOR THE SCROLL HIGHLIGHT OF THE LABEL TO WORK
-    // this.factors.forEach(item => {
-    //   console.log('inside id', item.nativeElement.id);
-    // });
-
-    if (
-      window.pageYOffset >= this.propOffset &&
-      window.pageYOffset < this.commentsOffset
-    ) {
-    
-    } else if (
-      window.pageYOffset >= this.commentsOffset &&
-      window.pageYOffset < this.internalCommentsOffset
-    ) {
-     
-    } else if (window.pageYOffset > this.internalCommentsOffset) {
-      
-    }
-  }
+  
 
   name = 'Angular ' + VERSION.major;
-  private activeSiteSection: string;
 
   Stats: any = {
     proposal: 'Proposal1',

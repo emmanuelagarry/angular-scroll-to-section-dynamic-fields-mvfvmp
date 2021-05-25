@@ -22,6 +22,8 @@ export class EnterDirective implements AfterViewInit, OnDestroy {
       const io = new IntersectionObserver((entries, _) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
+            // Add extra logic for showing section here
+
             this.current.next(section.id);
           }
         });
