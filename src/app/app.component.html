@@ -6,43 +6,27 @@
   <div class="left-section">
     <ng-container *ngIf="currentActiveState$ | async as currentActiveState">
       <ul>
-        <li
-          [ngClass]="{'active': currentActiveState === 'prop'}"
-          [class.active]="currentActiveState ==='prop'"
-        >
+        <li [ngClass]="{'active': currentActiveState === 'prop'}" [class.active]="currentActiveState ==='prop'">
           <a routerLink="./" fragment="prop">Prop</a>
         </li>
         <li *ngFor="let val of Stats.factorList;">
-          <a
-            routerLink="./"
-            [ngClass]="{'active': currentActiveState === val.factorName}"
-            [class.active]="currentActiveState === val.factorName"
-            [fragment]="val.factorName"
-          >
+          <a routerLink="./" [ngClass]="{'active': currentActiveState === val.factorName}"
+            [class.active]="currentActiveState === val.factorName" [fragment]="val.factorName">
             {{val.factorName}}
           </a>
         </li>
 
-        <li
-          [ngClass]="{'active': currentActiveState === 'comments'}"
-          [class.active]="currentActiveState ==='comments'"
-        >
+        <li [ngClass]="{'active': currentActiveState === 'comments'}" [class.active]="currentActiveState ==='comments'">
           <a routerLink="./" fragment="comments">Comments</a>
         </li>
-        <li
-          [ngClass]="{'active': currentActiveState === 'IntrnlCmnts'}"
-          [class.active]="currentActiveState ==='IntrnlCmnts'"
-        >
+        <li [ngClass]="{'active': currentActiveState === 'IntrnlCmnts'}"
+          [class.active]="currentActiveState ==='IntrnlCmnts'">
           <a routerLink="./" fragment="IntrnlCmnts">IntrnlCmnts</a>
         </li>
       </ul>
     </ng-container>
   </div>
-  <div
-    class="right-section"
-    appEnter
-    (current)="currentActiveSubject$.next($event)"
-  >
+  <div class="right-section" appEnter (current)="currentActive$.next($event)">
     <section id="prop" #prop>
       <h3>Proposal Summary</h3>
       <p>
@@ -74,11 +58,7 @@
       </p>
     </section>
     <ng-container>
-      <section
-        *ngFor="let val of Stats.factorList"
-        [id]="val.factorName"
-        #factor
-      >
+      <section *ngFor="let val of Stats.factorList" [id]="val.factorName" #factor>
         {{val.factorDescription}}
         <p>
           Lorem Ipsum is simply dummy text of the printing and typesetting
