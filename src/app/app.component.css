@@ -1,0 +1,56 @@
+p {
+  font-family: Lato;
+}
+
+.main-div {
+  display: flex;
+}
+
+a {
+  cursor: pointer;
+}
+
+.left-section {
+  /* width: 20%; */
+  position: sticky;
+  top: 50;
+}
+
+.left-section {
+  padding-top: 100px;
+}
+.left-section a {
+  font-size: 14px;
+  line-height: 20px;
+  display: block;
+  padding: 5px 10px;
+  text-decoration: none;
+  outline: none;
+}
+/* 
+.left-section .active {
+  border-right: 9px solid white;
+} */
+
+.left-section .active {
+  border-right: 9px solid green;
+}
+
+.left-section li {
+  list-style-type: none;
+}
+
+.left-section ul {
+  position: sticky;
+  top: 70px;
+  padding: 0;
+}
+
+.right-section {
+  /* width: 80%; */
+  background-color: rgba(242, 242, 242, 1);
+  border-bottom: 1px solid #ee6c4d;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
