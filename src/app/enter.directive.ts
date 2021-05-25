@@ -27,6 +27,8 @@ export class EnterDirective implements AfterViewInit, OnDestroy {
         });
       });
 
+      io.observe(section);
+
       this.ioS.push(io);
     });
   }

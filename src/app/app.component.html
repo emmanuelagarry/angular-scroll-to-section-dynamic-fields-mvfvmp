@@ -4,30 +4,43 @@
 </p>
 <div class="main-div">
   <div class="left-section">
-    <ng-container *ngIf="activeFragment$ | async as activeFragment">
-  
+    <ng-container *ngIf="currentActiveState$ | async as currentActiveState">
       <ul>
-      <li [ngClass]="{'active': currentActive === 'prop'}" [class.active]="activeFragment ==='prop'">
-        <a routerLink="./" fragment="prop">Prop</a>
-      </li>
-      <li *ngFor="let val of Stats.factorList; let i=index">
-        <a routerLink="./" [ngClass]="{'active': currentActive === 'factor'+i}"
-          [class.active]="activeFragment =='factor'+i" fragment="factor{{i}}">
-          {{val.factorName}}
-        </a>
-      </li>
+        <li
+          [ngClass]="{'active': currentActiveState.currentActive === 'prop'}"
+          [class.active]="currentActiveState.activeFragment ==='prop'"
+        >
+          <a routerLink="./" fragment="prop">Prop</a>
+        </li>
+        <li *ngFor="let val of Stats.factorList;">
+          <a
+            routerLink="./"
+            [ngClass]="{'active': currentActiveState.currentActive === val.factorName}"
+            [class.active]="currentActiveState.activeFragment === val.factorName"
+            fragment="val.factorName"
+          >
+            {{val.factorName}}
+          </a>
+        </li>
 
-      <li [ngClass]="{'active': currentActive === 'comments'}" [class.active]="activeFragment ==='comments'">
-        <a routerLink="./" fragment="comments">Comments</a>
-      </li>
-      <li [ngClass]="{'active': currentActive === 'IntrnlCmnts'}"
-        [class.active]="activeFragment ==='IntrnlCmnts'">
-        <a routerLink="./" fragment="IntrnlCmnts">IntrnlCmnts</a>
-      </li>
-    </ul>
+        <li
+          [ngClass]="{'active': currentActiveState.currentActive === 'comments'}"
+          [class.active]="currentActiveState.activeFragment ==='comments'"
+        >
+          <a routerLink="./" fragment="comments">Comments</a>
+        </li>
+        <li
+          [ngClass]="{'active': currentActiveState.currentActive === 'IntrnlCmnts'}"
+          [class.active]="currentActiveState.activeFragment ==='IntrnlCmnts'"
+        >
+          <a routerLink="./" fragment="IntrnlCmnts">IntrnlCmnts</a>
+        </li>
+
+        {{currentActiveState.currentActive}}
+      </ul>
     </ng-container>
   </div>
-  <div class="right-section">
+  <div class="right-section" appEnter (current)="currentActive$.next($event)">
     <section id="prop" #prop>
       <h3>Proposal Summary</h3>
       <p>
@@ -59,7 +72,11 @@
       </p>
     </section>
     <ng-container>
-      <section *ngFor="let val of Stats.factorList; let i=index" id="factor{{i}}" #factor>
+      <section
+        *ngFor="let val of Stats.factorList"
+        [id]="val.factorName"
+        #factor
+      >
         {{val.factorDescription}}
         <p>
           Lorem Ipsum is simply dummy text of the printing and typesetting
