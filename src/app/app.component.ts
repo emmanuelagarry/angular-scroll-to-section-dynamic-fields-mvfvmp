@@ -8,7 +8,8 @@ import {
   QueryList
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { filter, startWith } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { filter, map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'my-app',
@@ -19,7 +20,16 @@ export class AppComponent {
   constructor(private route: ActivatedRoute) {
   }
   activeFragment$ = this.route.fragment.pipe(filter(item => item !==null && item?.length > 0),startWith('none'));
-  public currentActive;
+
+  currentActive$ = new BehaviorSubject('null')
+
+  currentActiveState$ = combineLatest([this.activeFragment$, this.currentActive$]).pipe(map(([activeFragment,currentActive ]) => {
+    return {
+      activeFragment,
+      currentActive
+    }
+  }))
+  
   public propOffset: Number = null;
   public commentsOffset: Number = null;
   public internalCommentsOffset: Number = null;
@@ -47,14 +57,14 @@ export class AppComponent {
       window.pageYOffset >= this.propOffset &&
       window.pageYOffset < this.commentsOffset
     ) {
-      this.currentActive = 'prop';
+    
     } else if (
       window.pageYOffset >= this.commentsOffset &&
       window.pageYOffset < this.internalCommentsOffset
     ) {
-      this.currentActive = 'comments';
+     
     } else if (window.pageYOffset > this.internalCommentsOffset) {
-      this.currentActive = 'IntrnlCmnts';
+      
     }
   }
 
