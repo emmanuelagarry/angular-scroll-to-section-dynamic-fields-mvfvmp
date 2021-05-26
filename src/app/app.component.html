@@ -1,32 +1,33 @@
-<hello name="{{ name }}"></hello>
+<ng-container  *ngIf="state$ | async as state">
+  <hello name="{{ name }}"></hello>
 <p>
   Start editing to see some magic happen :)
 </p>
 <div class="main-div">
   <div class="left-section">
-    <ng-container *ngIf="currentActiveState$ | async as currentActiveState">
+  
       <ul>
-        <li [ngClass]="{'active': currentActiveState === 'prop'}" [class.active]="currentActiveState ==='prop'">
+        <li [ngClass]="{'active': state.currentActiveState === 'prop'}" [class.active]="state.currentActiveState ==='prop'">
           <a routerLink="./" fragment="prop">Prop</a>
         </li>
-        <li *ngFor="let val of Stats.factorList;">
-          <a routerLink="./" [ngClass]="{'active': currentActiveState === val.factorName}"
-            [class.active]="currentActiveState === val.factorName" [fragment]="val.factorName">
+        <li *ngFor="let val of state.stats.factorList;">
+          <a routerLink="./" [ngClass]="{'active':  state.currentActiveState === val.factorName}"
+            [class.active]=" state.currentActiveState === val.factorName" [fragment]="val.factorName">
             {{val.factorName}}
           </a>
         </li>
 
-        <li [ngClass]="{'active': currentActiveState === 'comments'}" [class.active]="currentActiveState ==='comments'">
+        <li [ngClass]="{'active': state.currentActiveState === 'comments'}" [class.active]=" state.currentActiveState ==='comments'">
           <a routerLink="./" fragment="comments">Comments</a>
         </li>
-        <li [ngClass]="{'active': currentActiveState === 'IntrnlCmnts'}"
-          [class.active]="currentActiveState ==='IntrnlCmnts'">
+        <li [ngClass]="{'active':state.currentActiveState === 'IntrnlCmnts'}"
+          [class.active]="state.currentActiveState ==='IntrnlCmnts'">
           <a routerLink="./" fragment="IntrnlCmnts">IntrnlCmnts</a>
         </li>
       </ul>
-    </ng-container>
+    
   </div>
-  <div class="right-section" appEnter (current)="currentActive$.next($event)">
+  <div class="right-section" appEnter  (current)="currentActive$.next($event)">
     <section id="prop" #prop>
       <h3>Proposal Summary</h3>
       <p>
@@ -58,7 +59,7 @@
       </p>
     </section>
     <ng-container>
-      <section *ngFor="let val of Stats.factorList" [id]="val.factorName" #factor>
+      <section *ngFor="let val of state.stats.factorList" [id]="val.factorName" #factor>
         {{val.factorDescription}}
         <p>
           Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -153,3 +154,4 @@
     </section>
   </div>
 </div>
+</ng-container>

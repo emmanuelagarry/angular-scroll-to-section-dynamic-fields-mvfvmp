@@ -3,20 +3,29 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+Input,
   OnDestroy,
   Output
 } from '@angular/core';
+import type{ Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { AppService } from './app.service';
 
 @Directive({
   selector: '[appEnter]'
 })
 export class EnterDirective implements AfterViewInit, OnDestroy {
-  constructor(private element: ElementRef) {}
+  constructor(private element: ElementRef, private appService: AppService) {}
   ioS: IntersectionObserver[] = [];
+
+ 
   @Output() current = new EventEmitter<string>();
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
+
+    await this.appService.contentLoaded$.pipe(take(1)).toPromise()
     const element = this.element.nativeElement as HTMLElement;
     const sections = element.querySelectorAll('section');
+      console.log(sections.length)
 
     sections.forEach(section => {
       const io = new IntersectionObserver((entries, _) => {
